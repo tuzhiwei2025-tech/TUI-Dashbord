@@ -4318,10 +4318,10 @@ const UnlockHeroCopy = styled.div`
 const UnlockSwipeWrap = styled.div<{ $compact?: boolean }>`
   position: relative;
   display: grid;
-  min-height: ${({ $compact }) => ($compact ? "170px" : "300px")};
+  min-height: ${({ $compact }) => ($compact ? "124px" : "300px")};
   place-items: center;
   overflow: visible;
-  transform: ${({ $compact }) => ($compact ? "scale(.82)" : "none")};
+  transform: ${({ $compact }) => ($compact ? "scale(.84)" : "none")};
   transform-origin: center;
 
   .conti {
@@ -4987,6 +4987,82 @@ const UnlockRankRow = styled.li`
   .value {
     color: #30424a;
     font-weight: 900;
+  }
+`;
+
+const UnlockPulseGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+
+  button {
+    position: relative;
+    display: grid;
+    align-content: end;
+    min-height: 112px;
+    overflow: hidden;
+    border-radius: 28px;
+    padding: 12px;
+    color: #30424a;
+    background:
+      radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--pulse) 32%, transparent), transparent 0 36%),
+      rgba(255,255,255,.25);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.72),
+      inset 0 -1px 0 rgba(120,136,142,.22),
+      8px 8px 18px rgba(112,126,132,.12),
+      -8px -8px 18px rgba(255,255,255,.72);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 180ms cubic-bezier(.22,1,.36,1), box-shadow 180ms ease;
+  }
+
+  button::before {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 24px;
+    height: 24px;
+    content: "";
+    border-radius: 50%;
+    background: var(--pulse);
+    box-shadow:
+      0 0 0 12px color-mix(in srgb, var(--pulse) 16%, transparent),
+      0 0 22px color-mix(in srgb, var(--pulse) 55%, transparent);
+    transition: transform 200ms cubic-bezier(.22,1,.36,1);
+  }
+
+  button:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      -7px -7px 16px rgba(255,255,255,.86),
+      9px 9px 20px rgba(112,126,132,.18),
+      inset 0 0 0 1px color-mix(in srgb, var(--pulse) 36%, transparent);
+  }
+
+  button:hover::before {
+    transform: scale(1.16);
+  }
+
+  strong,
+  span {
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  strong {
+    font-size: 13px;
+  }
+
+  span {
+    margin-top: 5px;
+    color: rgba(48,66,74,.56);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
   }
 `;
 
@@ -8080,8 +8156,86 @@ const DepthPanel = styled.div`
 
 const DepthLayerChart = styled.div`
   display: grid;
-  gap: 14px;
-  margin-top: 24px;
+  gap: 12px;
+  margin-top: 20px;
+`;
+
+const DepthNodeMatrix = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+
+  button {
+    position: relative;
+    display: grid;
+    align-content: end;
+    min-height: 112px;
+    overflow: hidden;
+    border-radius: 20px;
+    padding: 12px;
+    color: #f5fff8;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(62,234,142,.22), transparent 0 28%),
+      linear-gradient(145deg, rgba(255,255,255,.055), rgba(0,0,0,.28));
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.07),
+      inset 0 -22px 34px rgba(0,0,0,.32);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 200ms cubic-bezier(.22,1,.36,1), box-shadow 200ms ease;
+  }
+
+  button::before {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: var(--node);
+    height: var(--node);
+    content: "";
+    border-radius: 16px;
+    background: linear-gradient(145deg, #3eea8e, #111);
+    box-shadow: 0 0 20px rgba(62,234,142,.36);
+  }
+
+  button::after {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+    height: 5px;
+    content: "";
+    border-radius: 999px;
+    background: linear-gradient(90deg, #3eea8e var(--power), rgba(255,255,255,.08) 0);
+    box-shadow: 0 0 14px rgba(62,234,142,.24);
+  }
+
+  button:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      inset 0 0 0 1px rgba(62,234,142,.22),
+      0 0 24px rgba(62,234,142,.16);
+  }
+
+  strong,
+  span {
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  strong {
+    font-size: 13px;
+  }
+
+  span {
+    margin-top: 5px;
+    color: rgba(245,255,248,.5);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
 `;
 
 const DepthLayerRow = styled.div<{ $value: number }>`
@@ -8118,8 +8272,8 @@ const DepthLayerRow = styled.div<{ $value: number }>`
 
 const DepthMetricGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, minmax(96px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(84px, 1fr));
+  gap: 10px;
 
   @media (max-width: 860px) {
     grid-template-columns: 1fr;
@@ -8127,7 +8281,8 @@ const DepthMetricGrid = styled.div`
 `;
 
 const DepthMetric = styled(DepthPanel)`
-  min-height: 130px;
+  min-height: 94px;
+  padding: 12px;
 
   span,
   strong,
@@ -8137,14 +8292,14 @@ const DepthMetric = styled(DepthPanel)`
 
   span {
     color: rgba(245,245,245,.5);
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 900;
     letter-spacing: .14em;
     text-transform: uppercase;
   }
 
   strong {
-    margin-top: 18px;
+    margin-top: 10px;
     color: #f5f5f5;
     font-size: clamp(34px, 5vw, 56px);
     line-height: .92;
@@ -8160,9 +8315,9 @@ const DepthMetric = styled(DepthPanel)`
 
 const DepthList = styled.ol`
   display: grid;
-  gap: 13px;
+  gap: 9px;
   padding: 0;
-  margin: 22px 0 0;
+  margin: 18px 0 0;
   list-style: none;
 `;
 
@@ -8171,7 +8326,8 @@ const DepthListRow = styled.li<{ $accent: string }>`
   grid-template-columns: 44px 1fr auto;
   gap: 13px;
   align-items: center;
-  padding: 13px;
+  min-height: 58px;
+  padding: 9px 12px;
   border-radius: 20px;
   background: rgba(255,255,255,.035);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
@@ -8186,8 +8342,8 @@ const DepthListRow = styled.li<{ $accent: string }>`
 
   .rank {
     display: grid;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     place-items: center;
     border-radius: 16px;
     color: #080908;
@@ -8699,8 +8855,8 @@ const VoidRankingPanel = styled(VoidPanel)`
 
 const VoidMetricGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 
   @media (max-width: 860px) {
     grid-template-columns: 1fr;
@@ -8708,7 +8864,8 @@ const VoidMetricGrid = styled.div`
 `;
 
 const VoidMetric = styled(VoidPanel)<{ $accent: string }>`
-  min-height: 150px;
+  min-height: 86px;
+  padding: 12px;
   clip-path: polygon(0 0, 100% 0, 100% 86%, 90% 100%, 0 100%);
 
   span,
@@ -8719,16 +8876,16 @@ const VoidMetric = styled(VoidPanel)<{ $accent: string }>`
 
   span {
     color: ${({ $accent }) => $accent};
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 900;
     letter-spacing: .14em;
     text-transform: uppercase;
   }
 
   strong {
-    margin-top: 18px;
+    margin-top: 10px;
     color: #ffffff;
-    font-size: clamp(34px, 5vw, 58px);
+    font-size: clamp(24px, 2.4vw, 34px);
     line-height: .9;
   }
 
@@ -8802,9 +8959,9 @@ const VoidAbility = styled.div<{ $accent: string }>`
 const VoidList = styled.ol`
   display: grid;
   align-content: stretch;
-  gap: 13px;
+  gap: 10px;
   padding: 0;
-  margin: 22px 0 0;
+  margin: 18px 0 0;
   list-style: none;
 `;
 
@@ -8813,7 +8970,8 @@ const VoidListRow = styled.li<{ $accent: string }>`
   grid-template-columns: 46px 1fr auto;
   gap: 13px;
   align-items: center;
-  padding: 13px;
+  min-height: 82px;
+  padding: 10px 12px;
   border: 1px solid rgba(255,255,255,.08);
   background: rgba(0,0,0,.32);
   clip-path: polygon(0 0, 100% 0, 100% 78%, 92% 100%, 0 100%);
@@ -13000,15 +13158,16 @@ const RequestStatusTray = styled(RequestPanel)`
 
 const UnlockVaultBoard = styled.div`
   display: grid;
-  grid-template-columns: minmax(300px, .78fr) minmax(280px, .62fr) minmax(260px, .5fr);
-  grid-template-rows: auto minmax(470px, 1fr) minmax(150px, auto);
+  grid-template-columns: minmax(300px, .72fr) minmax(300px, .64fr) minmax(300px, .58fr);
+  grid-template-rows: auto minmax(0, 1fr) minmax(112px, .16fr);
   gap: 14px;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
   width: 100%;
   max-width: none;
   margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   box-shadow: none;
 
@@ -13077,25 +13236,30 @@ const UnlockVaultHeader = styled(UnlockPanel)`
 
 const UnlockSwipeStage = styled(UnlockPanel)`
   display: grid;
-  min-height: 150px;
+  min-height: 124px;
   place-items: center;
-  padding: 8px;
+  padding: 8px 18px;
 `;
 
 const UnlockRadarPanel = styled(UnlockPanel)`
-  min-height: 470px;
-  max-height: 540px;
+  display: grid;
+  grid-template-rows: auto minmax(220px, .64fr) minmax(0, .36fr);
+  align-items: start;
+  gap: 14px;
+  min-height: 0;
   overflow: hidden;
+  padding: 18px;
 `;
 
 const UnlockVaultTray = styled(UnlockPanel)`
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-  align-items: start;
-  max-height: 100%;
-  overflow: auto;
-  padding: 12px 14px;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: stretch;
+  min-height: 0;
+  overflow: hidden;
+  padding: 18px;
 
   @media (max-width: 980px) {
     grid-template-columns: 1fr;
@@ -13104,14 +13268,15 @@ const UnlockVaultTray = styled(UnlockPanel)`
 
 const UnlockKeySlots = styled.div`
   display: grid;
-  gap: 10px;
+  gap: 9px;
+  align-content: stretch;
 
   button {
     display: grid;
     grid-template-columns: 34px 1fr auto;
     gap: 10px;
     align-items: center;
-    min-height: 58px;
+    min-height: 0;
     padding: 9px 10px;
     border-radius: 22px;
     color: #30424a;
@@ -13169,6 +13334,79 @@ const UnlockKeySlots = styled.div`
   em {
     color: #30424a;
     font-style: normal;
+  }
+`;
+
+const UnlockRadarKeyGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-self: stretch;
+
+  button {
+    position: relative;
+    display: grid;
+    align-content: end;
+    min-height: 78px;
+    overflow: hidden;
+    border-radius: 24px;
+    padding: 12px;
+    color: #30424a;
+    background:
+      radial-gradient(circle at 30% 18%, color-mix(in srgb, var(--key-accent) 42%, transparent), transparent 0 32%),
+      rgba(255,255,255,.26);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.72),
+      inset 0 -1px 0 rgba(120,136,142,.24),
+      8px 8px 18px rgba(112,126,132,.12),
+      -8px -8px 18px rgba(255,255,255,.68);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 180ms cubic-bezier(.22,1,.36,1), box-shadow 180ms ease;
+  }
+
+  button::before {
+    position: absolute;
+    top: 13px;
+    left: 13px;
+    width: 18px;
+    height: 18px;
+    content: "";
+    border-radius: 50%;
+    background: var(--key-accent);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--key-accent) 62%, transparent);
+  }
+
+  button:hover {
+    transform: translateY(-5px) scale(1.015);
+    box-shadow:
+      -7px -7px 16px rgba(255,255,255,.82),
+      9px 9px 20px rgba(112,126,132,.18),
+      inset 0 0 0 1px color-mix(in srgb, var(--key-accent) 36%, transparent);
+  }
+
+  button:active {
+    transform: translateY(1px) scale(.98);
+  }
+
+  strong,
+  span {
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  strong {
+    font-size: 13px;
+  }
+
+  span {
+    margin-top: 5px;
+    color: rgba(48,66,74,.56);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .12em;
+    text-transform: uppercase;
   }
 `;
 
@@ -14017,8 +14255,8 @@ const BatteryTray = styled(BatteryPanel)`
 
 const DepthInstrumentBoard = styled.div`
   display: grid;
-  grid-template-columns: minmax(240px, .64fr) minmax(280px, .74fr) minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) minmax(132px, .22fr);
+  grid-template-columns: minmax(260px, .68fr) minmax(300px, .72fr) minmax(340px, .76fr);
+  grid-template-rows: auto minmax(0, .68fr) minmax(210px, .32fr);
   gap: 16px;
   height: 100vh;
   min-height: 0;
@@ -14098,21 +14336,26 @@ const DepthStageCompact = styled(DepthPanel)`
   display: grid;
   min-height: 100%;
   place-items: center;
+  padding: 14px;
 `;
 
 const DepthLayerLog = styled.div`
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
   width: 100%;
+  height: 100%;
+  align-content: stretch;
 
   button {
     display: grid;
-    grid-template-columns: 40px 1fr auto;
-    gap: 12px;
-    align-items: center;
-    min-height: 66px;
-    padding: 10px 12px;
-    border-radius: 18px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: start;
+    min-height: 0;
+    padding: 12px;
+    border-radius: 22px;
     color: #f5fff8;
     background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
     box-shadow:
@@ -14131,14 +14374,27 @@ const DepthLayerLog = styled.div`
 
   i {
     display: grid;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     place-items: center;
     border-radius: 14px;
     background:
       radial-gradient(circle at 35% 25%, rgba(255,255,255,.7), transparent 0 22%),
       linear-gradient(145deg, #3eea8e, #151515);
     box-shadow: 0 0 18px rgba(62,234,142,.34);
+  }
+
+  button::after {
+    align-self: stretch;
+    width: 8px;
+    margin: 6px auto;
+    content: "";
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(62,234,142,.78), rgba(62,234,142,.08) var(--depth-flow), rgba(255,255,255,.05) 0);
+    box-shadow:
+      0 0 18px rgba(62,234,142,.28),
+      inset 0 0 0 1px rgba(255,255,255,.08);
   }
 
   i::before {
@@ -14171,11 +14427,11 @@ const DepthTray = styled(DepthPanel)`
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto minmax(0, 1fr) auto;
-  gap: 14px;
+  gap: 12px;
   align-items: stretch;
   min-width: 0;
   max-height: 100%;
-  overflow: auto;
+  overflow: hidden;
   padding: 16px;
 
   > :first-child {
@@ -14194,8 +14450,8 @@ const DepthTray = styled(DepthPanel)`
 
 const VoidArena = styled.div`
   display: grid;
-  grid-template-columns: minmax(0, .82fr) minmax(320px, 1fr) minmax(0, .7fr);
-  grid-template-rows: auto minmax(0, 1fr) minmax(138px, .22fr);
+  grid-template-columns: minmax(280px, .72fr) minmax(340px, .9fr) minmax(300px, .62fr);
+  grid-template-rows: auto minmax(0, .76fr) minmax(158px, .24fr);
   gap: 16px;
   height: 100vh;
   min-height: 0;
@@ -14288,7 +14544,7 @@ const VoidSensorDeck = styled.div`
 
   button {
     position: relative;
-    min-height: 72px;
+    min-height: 62px;
     overflow: hidden;
     border-radius: 18px;
     padding: 10px;
@@ -14347,12 +14603,13 @@ const VoidSensorDeck = styled.div`
 
 const VoidHudTray = styled(VoidPanel)`
   display: grid;
-  grid-template-columns: 1fr 1.2fr auto;
-  gap: 16px;
-  align-items: center;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: stretch;
   min-width: 0;
   max-height: 100%;
-  overflow: auto;
+  overflow: hidden;
   padding: 16px;
 
   @media (max-width: 980px) {
@@ -15118,8 +15375,8 @@ const ClayStatPods = styled.div`
 
 const LumenLab = styled.div`
   display: grid;
-  grid-template-columns: minmax(240px, .5fr) minmax(360px, .72fr) minmax(260px, .48fr);
-  grid-template-rows: auto minmax(0, 1fr) minmax(132px, .22fr);
+  grid-template-columns: minmax(250px, .5fr) minmax(360px, .68fr) minmax(270px, .5fr);
+  grid-template-rows: auto minmax(0, .74fr) minmax(150px, .26fr);
   gap: 16px;
   height: 100vh;
   min-height: 0;
@@ -15194,11 +15451,12 @@ const LumenHeaderStrip = styled.div`
 
 const LumenRailPanel = styled(LumenPanel)`
   display: grid;
+  grid-template-rows: auto auto repeat(4, auto) minmax(0, 1fr);
   align-content: stretch;
   gap: 10px;
   padding: 16px;
-  max-height: 560px;
-  overflow: auto;
+  max-height: 100%;
+  overflow: hidden;
 `;
 
 const LumenChannelButton = styled.button<{ $on?: boolean }>`
@@ -15258,7 +15516,7 @@ const LumenChannelButton = styled.button<{ $on?: boolean }>`
 const LumenCardBay = styled.div`
   position: relative;
   display: grid;
-  min-height: 560px;
+  min-height: 0;
   place-items: center;
   overflow: visible;
   border-radius: 30px;
@@ -15290,8 +15548,8 @@ const LumenScope = styled(LumenPanel)`
   align-content: start;
   gap: 14px;
   min-height: 0;
-  max-height: 560px;
-  overflow: auto;
+  max-height: 100%;
+  overflow: hidden;
 `;
 
 const LumenBeamStack = styled.div`
@@ -17213,6 +17471,19 @@ function UnlockDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => vo
               <polygon points={radarPoints} className="radar-fill" />
               <polygon points={radarPoints} className="radar-stroke" />
             </UnlockRadarChart>
+            <UnlockRadarKeyGrid aria-label="Vault live key controls">
+              {[
+                ["Seal", "outer ring", "#ffcd58"],
+                ["Token", "rotating", "#7a929d"],
+                ["Audit", "live trace", "#fff9bc"],
+                ["Key", "local hold", "#66b9df"],
+              ].map(([name, note, accent]) => (
+                <button key={name} type="button" style={{ "--key-accent": accent } as React.CSSProperties}>
+                  <strong>{name}</strong>
+                  <span>{note}</span>
+                </button>
+              ))}
+            </UnlockRadarKeyGrid>
           </UnlockRadarPanel>
 
           <UnlockSwipeStage>
@@ -17246,12 +17517,24 @@ function UnlockDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => vo
                 </UnlockRankRow>
               ))}
             </UnlockRankList>
+            <UnlockPulseGrid aria-label="Vault pulse controls">
+              {[
+                ["Hold", "press state", "#fff9bc"],
+                ["Slide", "thumb travel", "#ffcd58"],
+                ["Glow", "unlock pulse", "#66b9df"],
+              ].map(([name, note, pulse]) => (
+                <button key={name} type="button" style={{ "--pulse": pulse } as React.CSSProperties}>
+                  <strong>{name}</strong>
+                  <span>{note}</span>
+                </button>
+              ))}
+            </UnlockPulseGrid>
           </UnlockPanel>
 
           <UnlockVaultTray>
             <div>
               <h3>Vault Metrics</h3>
-              <p>安全指标移到底部钥匙控制条。</p>
+              <p>右侧改成纵向钥匙控制，不再留一整块空白。</p>
             </div>
             <UnlockMetricGrid>
               {[
@@ -17918,6 +18201,19 @@ function DepthDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => voi
               </DepthLayerRow>
             ))}
           </DepthLayerChart>
+          <DepthNodeMatrix aria-label="Depth hover nodes">
+            {[
+              ["Tilt", "hover corner", "62%", "22px"],
+              ["Glow", "inner bloom", "84%", "28px"],
+              ["Rail", "charge path", "70%", "24px"],
+              ["Mask", "outline redraw", "92%", "30px"],
+            ].map(([name, note, power, node]) => (
+              <button key={name} type="button" style={{ "--power": power, "--node": node } as React.CSSProperties}>
+                <strong>{name}</strong>
+                <span>{note}</span>
+              </button>
+            ))}
+          </DepthNodeMatrix>
         </DepthPanel>
 
         <DepthStageCompact>
@@ -17931,7 +18227,6 @@ function DepthDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => voi
               { name: "Top Left Tilt", value: "rotateX -20 / Y 20", score: 98, accent: "#3eea8e" },
               { name: "Center Hover", value: "outline redraw", score: 92, accent: "#ffffff" },
               { name: "Bottom Rail", value: "bar translateZ", score: 86, accent: "#55dd99" },
-              { name: "Health Icon", value: "fill reveal", score: 79, accent: "#00ffaa" },
             ].map((item, index) => (
               <DepthListRow key={item.name} $accent={item.accent}>
                 <span className="rank">{index + 1}</span>
@@ -17965,11 +18260,11 @@ function DepthDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => voi
           </DepthMetricGrid>
           <DepthLayerLog aria-label="Depth layer log">
             {[
-              ["Z1", "Outer outline", "88%"],
-              ["Z2", "Charge rail", "69%"],
-              ["Z3", "Hover tilt", "91%"],
-            ].map(([layer, label, value]) => (
-              <button key={layer} type="button">
+              ["Z1", "Outer outline", "88%", "78%"],
+              ["Z2", "Charge rail", "69%", "58%"],
+              ["Z3", "Hover tilt", "91%", "88%"],
+            ].map(([layer, label, value, flow]) => (
+              <button key={layer} type="button" style={{ "--depth-flow": flow } as React.CSSProperties}>
                 <i data-layer={layer} />
                 <span>
                   <strong>{label}</strong>
