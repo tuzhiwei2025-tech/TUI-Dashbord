@@ -1,0 +1,8 @@
+interface:
+  display_name: "Liquid Neumorphic UI"
+  short_description: "Soft glassy neumorphic React component style"
+  brand_color: "#4CAF50"
+  default_prompt: "Use $liquid-neumorphic-ui to build a Next.js component in the swipe-confirm liquid neumorphic style."
+
+policy:
+  allow_implicit_invocation: true
