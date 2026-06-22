@@ -1565,7 +1565,7 @@ const ElectricMain = styled.div`
   min-height: 0;
   max-height: 100vh;
   overflow: hidden;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr) minmax(118px, .18fr);
 `;
 
 const ElectricTopbar = styled.header`
@@ -1646,7 +1646,7 @@ const ElectricHero = styled.div`
   position: relative;
   min-height: 100%;
   overflow: hidden;
-  padding: clamp(10px, 2vw, 26px) 0;
+  padding: clamp(8px, 1.6vw, 18px) 0;
   background:
     radial-gradient(circle at 78% 22%, rgba(94, 234, 189, 0.28), transparent 0 22%),
     radial-gradient(circle at 28% 16%, rgba(154, 77, 241, 0.36), transparent 0 34%),
@@ -1690,7 +1690,8 @@ const ElectricHeroContent = styled.div`
   grid-template-columns: minmax(0, 1fr) minmax(170px, .42fr);
   gap: 22px;
   align-items: center;
-  min-height: 310px;
+  min-height: 0;
+  height: 100%;
 
   @media (max-width: 820px) {
     grid-template-columns: 1fr;
@@ -1702,7 +1703,7 @@ const ElectricHeroCopy = styled.div`
     max-width: 620px;
     margin: 0;
     color: #ffffff;
-    font-size: clamp(34px, 5.6vw, 66px);
+    font-size: clamp(32px, 5vw, 58px);
     line-height: 0.86;
     letter-spacing: 0;
   }
@@ -1730,7 +1731,7 @@ const ElectricArcDock = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  margin-top: 24px;
+  margin-top: 18px;
 
   button {
     position: relative;
@@ -1791,6 +1792,121 @@ const ElectricArcDock = styled.div`
 
   @media (max-width: 820px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+`;
+
+const ElectricPulseLane = styled.div`
+  position: absolute;
+  right: 18px;
+  bottom: 138px;
+  left: 18px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(260px, .82fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+
+  .rail,
+  .nodes {
+    overflow: hidden;
+    border-radius: 28px;
+    background:
+      linear-gradient(#070a16, #070a16) padding-box,
+      linear-gradient(120deg, rgba(96,165,250,.5), rgba(154,77,241,.45), rgba(94,234,189,.48)) border-box;
+    border: 1px solid transparent;
+    box-shadow: inset 0 0 28px rgba(255,255,255,.035), 0 0 28px rgba(94,234,189,.08);
+  }
+
+  .rail {
+    position: relative;
+    min-height: 116px;
+    padding: 18px;
+  }
+
+  .rail::before {
+    position: absolute;
+    inset: 50% 18px auto;
+    height: 3px;
+    content: "";
+    border-radius: 999px;
+    background: linear-gradient(90deg, #60a5fa, #9a4df1, #5eeabd, #f9799c);
+    box-shadow: 0 0 20px rgba(94,234,189,.35);
+    animation: ${electricSweep} 3.8s linear infinite;
+  }
+
+  .rail span {
+    position: absolute;
+    top: calc(50% - 13px);
+    left: var(--x);
+    display: grid;
+    width: 26px;
+    height: 26px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--dot);
+    box-shadow: 0 0 20px var(--dot), inset 0 0 0 4px rgba(255,255,255,.18);
+    transition: transform 200ms cubic-bezier(.22,1,.36,1);
+  }
+
+  .rail:hover span {
+    transform: translateY(-8px) scale(1.08);
+  }
+
+  .nodes {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    min-height: 116px;
+    padding: 12px;
+  }
+
+  button {
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    padding: 12px;
+    color: rgba(248,251,255,.9);
+    background: rgba(255,255,255,.045);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.07);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 200ms cubic-bezier(.22,1,.36,1), box-shadow 200ms ease;
+  }
+
+  button::after {
+    position: absolute;
+    inset: auto 10px 10px;
+    height: 4px;
+    content: "";
+    border-radius: 999px;
+    background: var(--node);
+    box-shadow: 0 0 14px var(--node);
+    transform: scaleX(var(--level));
+    transform-origin: left;
+  }
+
+  button:hover {
+    transform: translateY(-5px);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.13), 0 0 26px color-mix(in srgb, var(--node) 42%, transparent);
+  }
+
+  strong,
+  small {
+    display: block;
+  }
+
+  strong {
+    color: #ffffff;
+    font-size: 18px;
+  }
+
+  small {
+    margin-top: 6px;
+    color: rgba(248,251,255,.52);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
   }
 `;
 
@@ -1995,16 +2111,13 @@ const ElectricPanel = styled.div`
 `;
 
 const ElectricMetricGrid = styled.div`
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 3;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 0;
   align-items: stretch;
+  min-height: 0;
+  overflow: hidden;
 
   @media (max-width: 720px) {
     display: grid;
@@ -7220,20 +7333,51 @@ const BatteryConsoleGrid = styled.div`
 `;
 
 const BatterySegmentChart = styled.div`
+  position: relative;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   align-items: end;
   gap: 10px;
-  height: 230px;
-  margin-top: 22px;
+  height: 100%;
+  min-height: 190px;
+  margin-top: 0;
   padding: 18px;
   border-radius: 22px;
   background: rgba(0,0,0,.28);
   box-shadow: inset 0 0 24px rgba(0,0,0,.42);
 
+  &::before,
+  &::after {
+    position: absolute;
+    right: 18px;
+    left: 18px;
+    content: "";
+    pointer-events: none;
+  }
+
+  &::before {
+    top: 18px;
+    height: 72px;
+    border-radius: 18px;
+    background:
+      linear-gradient(90deg, rgba(45,196,141,.18), transparent 28%, rgba(133,255,219,.12) 58%, transparent),
+      repeating-linear-gradient(90deg, rgba(133,255,219,.18) 0 2px, transparent 2px 46px);
+    box-shadow:
+      inset 0 0 0 1px rgba(133,255,219,.08),
+      0 0 28px rgba(45,196,141,.08);
+  }
+
+  &::after {
+    top: 48%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(133,255,219,.42), transparent);
+    box-shadow: 0 0 14px rgba(133,255,219,.34);
+  }
+
   span {
     position: relative;
-    height: var(--h);
+    z-index: 1;
+    height: min(88%, calc(var(--h) * 2.35));
     min-height: 28px;
     overflow: hidden;
     border-radius: 6px;
@@ -7363,6 +7507,8 @@ const BatteryModal = styled(BatteryPanel)`
 `;
 
 const BatteryKeyframes = styled.div`
+  display: none;
+
   @keyframes batteryLineGlow {
     0%, 100% { opacity: .3; }
     50% { opacity: .8; }
@@ -12660,10 +12806,95 @@ const RequestBoardHeader = styled(RequestPanel)`
 
 const RequestControlStage = styled(RequestPanel)`
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  gap: 18px;
+  grid-template-rows: minmax(210px, .62fr) minmax(0, 1fr) auto;
+  gap: 14px;
   min-height: 100%;
   align-items: center;
+`;
+
+const RequestStageTimeline = styled.div`
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  align-self: stretch;
+  padding: 14px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(107,59,211,.2), transparent 0 24%),
+    radial-gradient(circle at 88% 80%, rgba(255,136,0,.16), transparent 0 28%),
+    rgba(19,19,21,.58);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.07),
+    inset 0 -18px 32px rgba(0,0,0,.24);
+
+  button {
+    position: relative;
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    min-height: 48px;
+    overflow: hidden;
+    border-radius: 16px;
+    padding: 8px 10px;
+    color: rgba(255,255,255,.84);
+    background: rgba(0,0,0,.22);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 180ms cubic-bezier(.22,1,.36,1), box-shadow 180ms ease, color 180ms ease;
+  }
+
+  button::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    content: "";
+    background: var(--step);
+    box-shadow: 0 0 16px var(--step);
+  }
+
+  button:hover {
+    color: #ffffff;
+    transform: translateX(6px);
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.12),
+      0 0 24px color-mix(in srgb, var(--step) 34%, transparent);
+  }
+
+  i {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 14px;
+    background: linear-gradient(145deg, var(--step), rgba(255,255,255,.12));
+    box-shadow: 0 0 18px color-mix(in srgb, var(--step) 44%, transparent);
+    font-style: normal;
+    font-weight: 1000;
+  }
+
+  strong,
+  span,
+  em {
+    display: block;
+  }
+
+  strong {
+    font-size: 12px;
+  }
+
+  span,
+  em {
+    color: rgba(255,255,255,.48);
+    font-size: 10px;
+    font-weight: 900;
+  }
+
+  em {
+    color: var(--step);
+    font-style: normal;
+  }
 `;
 
 const RequestGlitchRail = styled.div`
@@ -13514,14 +13745,15 @@ const FilamentStatusTray = styled(FilamentPanel)`
 const BatteryRack = styled.div`
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: auto minmax(470px, 1fr) minmax(170px, auto);
+  grid-template-rows: auto minmax(0, 1fr) minmax(146px, .28fr);
   gap: 16px;
-  min-height: calc(100vh - 24px);
+  height: 100vh;
+  min-height: 0;
   width: 100%;
   max-width: none;
   margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   box-shadow: none;
 
@@ -13593,15 +13825,96 @@ const BatteryRackHeader = styled(BatteryPanel)`
 
 const BatteryCellRack = styled(BatteryPanel)`
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 12px;
   min-height: 100%;
+  padding: 18px 20px;
+`;
+
+const BatteryCellRackIntro = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: start;
+
+  p {
+    max-width: 720px;
+  }
+`;
+
+const BatteryRackPills = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(72px, 1fr));
+  gap: 8px;
+
+  button {
+    position: relative;
+    min-height: 42px;
+    overflow: hidden;
+    border-radius: 14px;
+    padding: 7px 10px;
+    color: #ffffff;
+    background: rgba(25,25,25,.82);
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.06),
+      0 0 18px rgba(45,196,141,.08);
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 900;
+    text-align: left;
+    transition: transform 220ms cubic-bezier(.175,.885,.32,1.275), box-shadow 220ms ease;
+  }
+
+  button::after {
+    position: absolute;
+    inset: auto 8px 7px;
+    height: 3px;
+    content: "";
+    border-radius: 999px;
+    background: linear-gradient(90deg, #2dc48d, #85ffdb);
+    box-shadow: 0 0 10px rgba(45,196,141,.55);
+    transform: scaleX(var(--charge));
+    transform-origin: left;
+  }
+
+  button:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow:
+      inset 0 0 0 1px rgba(133,255,219,.16),
+      0 0 24px rgba(45,196,141,.24);
+  }
+
+  @media (max-width: 1100px) {
+    display: none;
+  }
+`;
+
+const BatteryRackCore = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, .32fr);
+  gap: 12px;
+  min-height: 0;
+
+  @media (max-width: 980px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const BatteryMicroStack = styled.div`
+  display: grid;
+  grid-template-rows: minmax(0, .9fr) minmax(0, 1fr);
+  gap: 10px;
+  min-height: 0;
+
+  > div {
+    min-height: 0;
+  }
 `;
 
 const BatteryBusGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  margin-top: 14px;
 
   button {
     position: relative;
@@ -13663,13 +13976,22 @@ const BatterySystemRail = styled(BatteryPanel)`
   display: grid;
   grid-template-columns: minmax(0, .72fr) minmax(0, 1fr);
   gap: 14px;
-  align-items: center;
+  align-items: stretch;
   min-height: 0;
-  max-height: 170px;
-  overflow: auto;
+  overflow: hidden;
+  padding: 16px;
 
   h3 {
     font-size: 13px;
+  }
+
+  ${BatteryBusGrid} {
+    align-self: stretch;
+  }
+
+  ${BatteryBusGrid} button {
+    min-height: 54px;
+    align-content: end;
   }
 
   @media (max-width: 980px) {
@@ -13684,8 +14006,8 @@ const BatteryTray = styled(BatteryPanel)`
   gap: 18px;
   align-items: center;
   min-width: 0;
-  max-height: 100%;
-  overflow: auto;
+  min-height: 0;
+  overflow: hidden;
   padding: 16px;
 
   @media (max-width: 980px) {
@@ -13696,14 +14018,15 @@ const BatteryTray = styled(BatteryPanel)`
 const DepthInstrumentBoard = styled.div`
   display: grid;
   grid-template-columns: minmax(240px, .64fr) minmax(280px, .74fr) minmax(0, 1fr);
-  grid-template-rows: auto minmax(500px, 1fr) minmax(140px, auto);
+  grid-template-rows: auto minmax(0, 1fr) minmax(132px, .22fr);
   gap: 16px;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
   width: 100%;
   max-width: none;
   margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   box-shadow: none;
 
@@ -13872,14 +14195,15 @@ const DepthTray = styled(DepthPanel)`
 const VoidArena = styled.div`
   display: grid;
   grid-template-columns: minmax(0, .82fr) minmax(320px, 1fr) minmax(0, .7fr);
-  grid-template-rows: auto minmax(620px, 1fr) minmax(150px, auto);
+  grid-template-rows: auto minmax(0, 1fr) minmax(138px, .22fr);
   gap: 16px;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
   width: 100%;
   max-width: none;
   margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   box-shadow: none;
 
@@ -14212,14 +14536,15 @@ const DivineForgeTray = styled(DivinePanel)`
 const TicketGate = styled.div`
   display: grid;
   grid-template-columns: minmax(0, .74fr) minmax(360px, 1.12fr);
-  grid-template-rows: auto minmax(430px, 1fr) minmax(128px, auto);
+  grid-template-rows: auto minmax(0, 1fr) minmax(132px, .22fr);
   gap: 14px;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
   width: 100%;
   max-width: none;
   margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   box-shadow: none;
 
@@ -14312,9 +14637,10 @@ const TicketScanTray = styled(TicketPanel)`
 const ClayWorkbench = styled.div`
   display: grid;
   grid-template-columns: minmax(260px, .42fr) minmax(0, 1fr);
-  grid-template-rows: auto minmax(455px, 1fr) minmax(220px, auto);
+  grid-template-rows: auto minmax(0, 1fr) minmax(176px, .28fr);
   gap: 14px;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
   width: 100%;
   max-width: none;
   margin: 0;
@@ -14334,12 +14660,12 @@ const ClayWorkbench = styled.div`
 
   > :nth-child(4) {
     grid-column: 1;
-    grid-row: 4;
+    grid-row: 3;
   }
 
   > :nth-child(5) {
     grid-column: 2;
-    grid-row: 3 / 5;
+    grid-row: 3;
   }
 
   @media (max-width: 860px) {
@@ -14793,20 +15119,21 @@ const ClayStatPods = styled.div`
 const LumenLab = styled.div`
   display: grid;
   grid-template-columns: minmax(240px, .5fr) minmax(360px, .72fr) minmax(260px, .48fr);
-  grid-template-rows: auto minmax(660px, 1fr) minmax(140px, auto);
+  grid-template-rows: auto minmax(0, 1fr) minmax(132px, .22fr);
   gap: 16px;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
   width: 100%;
   max-width: none;
   margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   box-shadow: none;
 
   > :nth-child(2) {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 2 / 4;
   }
 
   > :nth-child(3) {
@@ -14821,8 +15148,8 @@ const LumenLab = styled.div`
   }
 
   > :nth-child(5) {
-    grid-column: 1 / -1;
-    grid-row: 4;
+    grid-column: 2 / 4;
+    grid-row: 3;
   }
 
   @media (max-width: 860px) {
@@ -15142,14 +15469,15 @@ const LumenMirrorRail = styled.div`
 const PromptCockpit = styled.div`
   display: grid;
   grid-template-columns: minmax(300px, .72fr) minmax(0, 1fr);
-  grid-template-rows: auto minmax(620px, 1fr) minmax(230px, auto);
+  grid-template-rows: auto minmax(0, 1fr) minmax(190px, .24fr);
   gap: 16px;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
   width: 100%;
   max-width: none;
   margin: 0;
   padding: 0;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   box-shadow: none;
 
@@ -15214,7 +15542,7 @@ const PromptCommandHeader = styled(PromptPanel)`
 
 const PromptComposerBay = styled(PromptPanel)`
   display: grid;
-  grid-template-rows: minmax(0, .72fr) minmax(330px, .88fr);
+  grid-template-rows: minmax(250px, .52fr) minmax(0, 1fr);
   gap: 14px;
   align-content: stretch;
   justify-items: center;
@@ -15357,7 +15685,7 @@ const PromptQueueDock = styled(PromptPanel)`
   gap: 12px;
   padding: 18px;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
 `;
 
 const PromptQueueFooter = styled.div`
@@ -15499,10 +15827,11 @@ const PromptTaskButton = styled.button<{ $active?: boolean }>`
 
 const PromptBottomModules = styled.div`
   display: grid;
-  grid-template-columns: minmax(240px, .9fr) minmax(280px, 1fr) minmax(220px, .46fr);
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1fr);
   gap: 12px;
   min-width: 0;
   min-height: 0;
+  overflow: hidden;
 
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
@@ -15510,19 +15839,30 @@ const PromptBottomModules = styled.div`
 `;
 
 const PromptModule = styled(PromptPanel)`
-  min-height: 112px;
-  max-height: 154px;
-  overflow: auto;
-  padding: 14px;
+  min-height: 0;
+  overflow: hidden;
+  padding: 12px;
+
+  &:last-child {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &:last-child p {
+    display: none;
+  }
 `;
 
 const PromptSparkline = styled.div`
   display: flex;
-  height: 56px;
+  height: 46px;
   align-items: end;
   gap: 8px;
-  margin-top: 12px;
-  padding: 12px;
+  margin-top: 10px;
+  padding: 10px;
   border: 1.5px solid #363636;
   border-radius: 18px;
   background: rgba(0,0,0,.42);
@@ -15545,7 +15885,7 @@ const PromptChipGrid = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 10px;
 
   button {
     min-height: 34px;
@@ -16310,6 +16650,31 @@ function ElectricDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => 
                 <span>plasma score</span>
               </ElectricGauge>
             </ElectricHeroContent>
+            <ElectricPulseLane aria-label="Electric pulse lane">
+              <div className="rail" aria-hidden="true">
+                {[
+                  ["12%", "#60a5fa"],
+                  ["38%", "#9a4df1"],
+                  ["64%", "#5eeabd"],
+                  ["84%", "#f9799c"],
+                ].map(([x, color]) => (
+                  <span key={x} style={{ "--x": x, "--dot": color } as React.CSSProperties} />
+                ))}
+              </div>
+              <div className="nodes">
+                {[
+                  ["Flux", "routing", "#60a5fa", ".72"],
+                  ["Pulse", "queue", "#9a4df1", ".88"],
+                  ["Ion", "signal", "#5eeabd", ".94"],
+                  ["Spark", "edge", "#f9799c", ".62"],
+                ].map(([value, label, color, level]) => (
+                  <button key={label} type="button" style={{ "--node": color, "--level": level } as React.CSSProperties}>
+                    <strong>{value}</strong>
+                    <small>{label}</small>
+                  </button>
+                ))}
+              </div>
+            </ElectricPulseLane>
           </ElectricHero>
 
           <ElectricSideStack>
@@ -16649,6 +17014,22 @@ function RequestDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => v
 
           <RequestControlStage>
             <RequestControlCard />
+            <RequestStageTimeline aria-label="Request stage timeline">
+              {[
+                ["1", "Intake glow", "queued", "#6b3bd3"],
+                ["2", "Plan branch", "running", "#ff8800"],
+                ["3", "Review pulse", "ready", "#0fb4c6"],
+              ].map(([index, title, state, accent]) => (
+                <button key={title} type="button" style={{ "--step": accent } as React.CSSProperties}>
+                  <i>{index}</i>
+                  <span>
+                    <strong>{title}</strong>
+                    <span>additional request lane</span>
+                  </span>
+                  <em>{state}</em>
+                </button>
+              ))}
+            </RequestStageTimeline>
             <RequestGlitchRail aria-label="Request quick controls">
               {[
                 ["Priority", "P1", "#6b3bd3"],
@@ -17323,13 +17704,57 @@ function BatteryDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => v
         <BatteryChargeWidget compact />
 
         <BatteryCellRack>
-          <h3>Charge Segments</h3>
-          <p>不是普通柱状图，使用参考组件的分段流光和绿色 energize 动画做成电芯输出图。</p>
-          <BatterySegmentChart aria-label="Battery segment output chart">
-            {[72, 98, 64, 116, 88, 142, 76, 126, 92, 154, 108, 136].map((value, index) => (
-              <span key={index} style={{ "--h": `${value}px`, "--d": `${index * 0.045}s` } as React.CSSProperties} />
-            ))}
-          </BatterySegmentChart>
+          <BatteryCellRackIntro>
+            <div>
+              <h3>Charge Segments</h3>
+              <p>不是普通柱状图，使用参考组件的分段流光和绿色 energize 动画做成电芯输出图。</p>
+            </div>
+            <BatteryRackPills aria-label="Battery rack quick stats">
+              {[
+                ["74%", "input", .74],
+                ["91%", "stable", .91],
+                ["12", "cells", .82],
+              ].map(([value, label, charge]) => (
+                <button key={label} type="button" style={{ "--charge": charge } as React.CSSProperties}>
+                  <strong>{value}</strong> {label}
+                </button>
+              ))}
+            </BatteryRackPills>
+          </BatteryCellRackIntro>
+          <BatteryRackCore>
+            <BatterySegmentChart aria-label="Battery segment output chart">
+              {[72, 98, 64, 116, 88, 142, 76, 126, 92, 154, 108, 136].map((value, index) => (
+                <span key={index} style={{ "--h": `${value}px`, "--d": `${index * 0.045}s` } as React.CSSProperties} />
+              ))}
+            </BatterySegmentChart>
+            <BatteryMicroStack>
+              <div>
+                <h3>Cell Matrix</h3>
+                <BatteryCellGrid>
+                  {batteryCellGrid.map((value, index) => (
+                    <BatteryCell key={index} $value={value}>
+                      {value}
+                    </BatteryCell>
+                  ))}
+                </BatteryCellGrid>
+              </div>
+              <div>
+                <h3>System Ranking</h3>
+                <BatteryRankList>
+                  {batterySystems.slice(0, 3).map((item, index) => (
+                    <BatteryRankRow key={item.name} $accent={item.accent}>
+                      <span className="rank">{index + 1}</span>
+                      <div>
+                        <strong>{item.name}</strong>
+                        <span>{item.value}</span>
+                      </div>
+                      <em>{item.score}</em>
+                    </BatteryRankRow>
+                  ))}
+                </BatteryRankList>
+              </div>
+            </BatteryMicroStack>
+          </BatteryRackCore>
           <BatteryBusGrid aria-label="Battery energy bus">
             {[
               ["Grid", "8.4kw", .88],
@@ -17346,27 +17771,23 @@ function BatteryDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => v
         </BatteryCellRack>
 
         <BatterySystemRail>
-          <h3>Cell Matrix</h3>
-          <BatteryCellGrid>
-            {batteryCellGrid.map((value, index) => (
-              <BatteryCell key={index} $value={value}>
-                {value}
-              </BatteryCell>
+          <div>
+            <h3>Thermal Lanes</h3>
+            <p>底部保留电路卡的弹性反馈，用短电芯条填满横向空间。</p>
+          </div>
+          <BatteryBusGrid aria-label="Battery thermal lanes">
+            {[
+              ["North", "63c", .63],
+              ["East", "78c", .78],
+              ["South", "54c", .54],
+              ["West", "84c", .84],
+            ].map(([label, value, bus]) => (
+              <button key={label} type="button" style={{ "--bus": bus } as React.CSSProperties}>
+                <strong>{value}</strong>
+                <span>{label}</span>
+              </button>
             ))}
-          </BatteryCellGrid>
-          <h3>System Ranking</h3>
-          <BatteryRankList>
-            {batterySystems.map((item, index) => (
-              <BatteryRankRow key={item.name} $accent={item.accent}>
-                <span className="rank">{index + 1}</span>
-                <div>
-                  <strong>{item.name}</strong>
-                  <span>{item.value}</span>
-                </div>
-                <em>{item.score}</em>
-              </BatteryRankRow>
-            ))}
-          </BatteryRankList>
+          </BatteryBusGrid>
         </BatterySystemRail>
 
         <BatteryTray>
