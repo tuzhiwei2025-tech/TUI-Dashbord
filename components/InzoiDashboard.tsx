@@ -1274,7 +1274,7 @@ const Panel = styled.section<{ $family?: (typeof styleFamilies)[PageConfig["them
 
 const InfoLayout = styled.div`
   display: grid;
-  grid-template-columns: minmax(205px, .46fr) minmax(0, 1fr);
+  grid-template-columns: minmax(190px, .42fr) minmax(0, 1fr);
   gap: 16px;
   min-height: 0;
   height: 100%;
@@ -1599,7 +1599,7 @@ const StageGlyph = styled.div<{ $display: (typeof themeModes)[PageConfig["theme"
 
 const Charts = styled.div`
   display: grid;
-  grid-template-rows: minmax(178px, 1.38fr) minmax(112px, .82fr) 48px;
+  grid-template-rows: minmax(188px, 1.45fr) minmax(126px, .9fr);
   gap: 8px;
   min-height: 0;
   min-width: 0;
@@ -1837,14 +1837,24 @@ const MiniGrid = styled.div`
   min-height: 0;
 `;
 
-const OriginalDock = styled.div<{ $theme: PageConfig["theme"]; $family: (typeof styleFamilies)[PageConfig["theme"]] }>`
+const OriginalDock = styled.div<{ $theme: PageConfig["theme"]; $family: (typeof styleFamilies)[PageConfig["theme"]]; $compact?: boolean }>`
+  ${({ $compact }) =>
+    $compact
+      ? `
+  position: absolute;
+  z-index: 4;
+  right: 12px;
+  bottom: 70px;
+  left: 12px;
+`
+      : ""}
   display: grid;
-  grid-template-columns: minmax(168px, 1.08fr) repeat(3, minmax(72px, .66fr));
-  gap: 10px;
-  height: 48px;
+  grid-template-columns: ${({ $compact }) => ($compact ? "minmax(86px, 1fr) repeat(2, minmax(52px, .62fr))" : "minmax(168px, 1.08fr) repeat(3, minmax(72px, .66fr))")};
+  gap: ${({ $compact }) => ($compact ? "6px" : "10px")};
+  height: ${({ $compact }) => ($compact ? "42px" : "48px")};
   min-height: 0;
   border-radius: ${({ $theme }) => ($theme === "ticket" ? "22px 22px 22px 8px" : $theme === "soft" || $theme === "confirm" || $theme === "clay" ? "28px" : "22px")};
-  padding: 8px;
+  padding: ${({ $compact }) => ($compact ? "6px" : "8px")};
   background: ${({ $theme, $family }) =>
     $family === "neumorphic"
       ? "linear-gradient(145deg, #dfe8e3, #f8fffb)"
@@ -1895,7 +1905,7 @@ const OriginalDock = styled.div<{ $theme: PageConfig["theme"]; $family: (typeof 
         ? "6px 6px 15px rgba(63,90,93,.14), -6px -6px 15px rgba(255,255,255,.92)"
         : "inset 0 1px 0 rgba(255,255,255,.62), 0 12px 22px color-mix(in srgb, var(--accent) 12%, transparent)"};
     cursor: pointer;
-    font-size: 12px;
+    font-size: ${({ $compact }) => ($compact ? "10px" : "12px")};
     font-weight: 930;
     transition: transform 190ms cubic-bezier(.68,-.55,.27,1.55), box-shadow 190ms ease, filter 190ms ease;
   }
@@ -1923,11 +1933,11 @@ const OriginalDock = styled.div<{ $theme: PageConfig["theme"]; $family: (typeof 
     align-items: center;
     justify-content: flex-end;
     border-radius: 999px;
-    padding: 0 16px 0 56px;
+    padding: ${({ $compact }) => ($compact ? "0 10px 0 38px" : "0 16px 0 56px")};
     color: #fff;
     background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent-2) 72%, #ecfff4));
     box-shadow: inset 5px 5px 11px rgba(65,86,88,.18), inset -5px -5px 11px rgba(255,255,255,.42);
-    font-size: 12px;
+    font-size: ${({ $compact }) => ($compact ? "10px" : "12px")};
     font-weight: 940;
   }
 
@@ -1935,8 +1945,8 @@ const OriginalDock = styled.div<{ $theme: PageConfig["theme"]; $family: (typeof 
     position: absolute;
     left: 6px;
     top: 50%;
-    width: 26px;
-    height: 26px;
+    width: ${({ $compact }) => ($compact ? "22px" : "26px")};
+    height: ${({ $compact }) => ($compact ? "22px" : "26px")};
     border-radius: 50%;
     background: #fff;
     box-shadow: 7px 7px 16px rgba(63,90,93,.18), -4px -4px 12px rgba(255,255,255,.8);
@@ -2394,6 +2404,7 @@ function ThemeDisplay({ page, family }: { page: PageConfig; family: (typeof styl
           <strong>{mode.display === "filament" ? "84%" : "78"}</strong>
         </div>
       </StageStats>
+      <ThemeOriginalControls page={page} family={family} compact onOpen={() => undefined} />
     </ThemeStage>
   );
 }
@@ -2519,10 +2530,12 @@ function SignatureVisual({ page }: { page: PageConfig }) {
 function ThemeOriginalControls({
   page,
   family,
+  compact = false,
   onOpen,
 }: {
   page: PageConfig;
   family: (typeof styleFamilies)[PageConfig["theme"]];
+  compact?: boolean;
   onOpen: () => void;
 }) {
   const labels: Record<PageConfig["theme"], readonly string[]> = {
@@ -2546,11 +2559,11 @@ function ThemeOriginalControls({
   };
 
   return (
-    <OriginalDock $theme={page.theme} $family={family}>
+    <OriginalDock $theme={page.theme} $family={family} $compact={compact}>
       <button className="signature" type="button" aria-label={`${page.nav} signature control`} onClick={onOpen}>
         <SignatureVisual page={page} />
       </button>
-      {labels[page.theme].map((label) => (
+      {labels[page.theme].slice(0, compact ? 2 : 3).map((label) => (
         <button key={label} className="theme-button" type="button" onClick={onOpen}>
           {label}
         </button>
@@ -2954,8 +2967,6 @@ export default function InzoiDashboard() {
                       <EChartBlock page={page} kind="secondary" mini />
                     </MiniCard>
                   </MiniGrid>
-
-                  <ThemeOriginalControls page={page} family={family} onOpen={() => setModalOpen(true)} />
                 </Charts>
               </InfoLayout>
             </Panel>
