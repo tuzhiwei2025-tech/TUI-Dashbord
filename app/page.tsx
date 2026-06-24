@@ -1,5 +1,5 @@
-import { LiquidKitShowcase } from "@/components/LiquidKit";
+import InzoiDashboard from "@/components/InzoiDashboard";
 
 export default function Home() {
-  return <LiquidKitShowcase />;
+  return <InzoiDashboard />;
 }

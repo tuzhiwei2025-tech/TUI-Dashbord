@@ -456,9 +456,9 @@ const RootShell = styled.main<{ $background: BackgroundMode; $dashboard: Dashboa
   }
 `;
 
-const AppShell = styled.div`
+const AppShell = styled.div<{ $hideSidebar?: boolean }>`
   display: grid;
-  grid-template-columns: 74px minmax(0, 1fr);
+  grid-template-columns: ${({ $hideSidebar }) => ($hideSidebar ? "minmax(0, 1fr)" : "74px minmax(0, 1fr)")};
   gap: 0;
   width: 100%;
   min-height: 100vh;
@@ -19504,37 +19504,45 @@ function NeuralDashboard({ setModalOpen }: { setModalOpen: (open: boolean) => vo
   );
 }
 
-export function LiquidKitShowcase() {
-  const [activeDashboard, setActiveDashboard] = useState<DashboardPage>("soft");
+export function LiquidKitShowcase({
+  initialDashboard = "soft",
+  hideSidebar = false,
+}: {
+  initialDashboard?: DashboardPage;
+  hideSidebar?: boolean;
+}) {
+  const [activeDashboard, setActiveDashboard] = useState<DashboardPage>(initialDashboard);
   const [backgroundMode, setBackgroundMode] = useState<BackgroundMode>("mint");
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <RootShell $background={backgroundMode} $dashboard={activeDashboard} data-dashboard={activeDashboard}>
-      <AppShell>
-        <GlobalSidebar $dashboard={activeDashboard}>
-          <GlobalBrand>
-            <span className="mark">
-              <Sparkles size={25} />
-            </span>
-            <div>
-              <strong>Dashboard Lab</strong>
-              <span>统一左侧菜单，每个页面独立布局和交互语言。</span>
-            </div>
-          </GlobalBrand>
-          <GlobalNav aria-label="Dashboard style navigation">
-            {dashboardItems.map(([id, label, Icon]) => (
-              <GlobalNavButton key={id} type="button" aria-label={label} data-label={label} $dashboard={activeDashboard} $active={activeDashboard === id} onClick={() => setActiveDashboard(id)}>
-                <Icon size={19} />
-                <span className="label">{label}</span>
-              </GlobalNavButton>
-            ))}
-          </GlobalNav>
-          <GlobalSidebarFooter>
-            <strong>Style switcher</strong>
-            <span>左侧只负责切换风格，右侧 dashboard 不再放重复菜单。</span>
-          </GlobalSidebarFooter>
-        </GlobalSidebar>
+      <AppShell $hideSidebar={hideSidebar}>
+        {!hideSidebar && (
+          <GlobalSidebar $dashboard={activeDashboard}>
+            <GlobalBrand>
+              <span className="mark">
+                <Sparkles size={25} />
+              </span>
+              <div>
+                <strong>Dashboard Lab</strong>
+                <span>统一左侧菜单，每个页面独立布局和交互语言。</span>
+              </div>
+            </GlobalBrand>
+            <GlobalNav aria-label="Dashboard style navigation">
+              {dashboardItems.map(([id, label, Icon]) => (
+                <GlobalNavButton key={id} type="button" aria-label={label} data-label={label} $dashboard={activeDashboard} $active={activeDashboard === id} onClick={() => setActiveDashboard(id)}>
+                  <Icon size={19} />
+                  <span className="label">{label}</span>
+                </GlobalNavButton>
+              ))}
+            </GlobalNav>
+            <GlobalSidebarFooter>
+              <strong>Style switcher</strong>
+              <span>左侧只负责切换风格，右侧 dashboard 不再放重复菜单。</span>
+            </GlobalSidebarFooter>
+          </GlobalSidebar>
+        )}
 
         <GlobalContent>
           {activeDashboard === "soft" ? (
