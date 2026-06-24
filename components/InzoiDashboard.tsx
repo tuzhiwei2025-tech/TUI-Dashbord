@@ -2979,7 +2979,7 @@ export default function InzoiDashboard() {
                 </div>
               </header>
               <RankList>
-                {rankingRows.map(([name, amount, role, tone], index) => (
+                {rankingRows.slice(0, 5).map(([name, amount, role, tone], index) => (
                   <RankRow key={`${name}-${index}`} type="button" $active={index % 2 === 0}>
                     <span className="avatar" style={{ "--tone": tone } as React.CSSProperties} />
                     <span>
